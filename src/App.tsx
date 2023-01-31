@@ -1,25 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from 'react';
+import styles from './App.module.css';
+
+import { AppHeader } from './components/app-header/app-header';
+import { ChannelBox } from './components/channel-box/channel-box';
+import { TChannel } from './components/channel/channel';
+
+import { apiRequest, PLAYLIST_URL } from './utils/api';
+
+import { ChannelsContext, FavoriteChannelsContext, FilterContext } from './services/appContext';
 
 function App() {
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isError, setIsError] = useState<boolean>(false);
+
+  const [channels, setChannels] = useState<TChannel[]>([]);
+  const [favoritesChannels, setFavoritesChannels] = useState<number[]>([]);
+  const [filter, setFilter] = useState<string>('');
+
+  useEffect(() => {
+    apiRequest(PLAYLIST_URL)
+      .then((data) => {
+        setChannels(data.channels);
+        setIsError(false);
+      })
+      .catch(() => setIsError(true))
+      .finally(() => setIsLoading(false))
+  }, [])
+
+  useEffect(() => {
+    const fromLocalStorage = JSON.parse(window.localStorage.getItem('favorites') as any);
+    setFavoritesChannels(fromLocalStorage ? fromLocalStorage : []);
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <ChannelsContext.Provider value={{ channels, setChannels }}>
+        <FilterContext.Provider value={{ filter, setFilter }}>
+          <AppHeader />
+          <main className={styles.main}>
+            {isLoading ? <p className={styles.loading} >Загружаем данные...</p> : null}
+            {isError ? <p className={styles.error} >Произошла ошибка, попробуйте еще раз</p> : null}
+            <FavoriteChannelsContext.Provider value={{ favoritesChannels, setFavoritesChannels }}>
+              {channels && !isError && channels.length ? <ChannelBox /> : null}
+            </FavoriteChannelsContext.Provider>
+          </main>
+        </FilterContext.Provider>
+      </ChannelsContext.Provider>
+    </>
   );
 }
 
