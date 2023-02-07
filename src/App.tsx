@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import styles from './App.module.css';
+import styled from 'styled-components';
 
 import { AppHeader } from './components/app-header/app-header';
 import { ChannelBox } from './components/channel-box/channel-box';
@@ -8,6 +8,26 @@ import { TChannel } from './components/channel/channel';
 import { apiRequest, PLAYLIST_URL } from './utils/api';
 
 import { ChannelsContext, FavoriteChannelsContext, FilterContext } from './services/appContext';
+
+import { StateText } from './styles/components';
+
+const Main = styled.main`
+  height: 100%;
+  width: 100%;
+  padding-left: 24px;
+  padding-right: 24px;
+  background-color: #1A1A1A;
+  box-sizing: border-box;
+`;
+
+interface IApiState {
+  error?: boolean;
+}
+
+const ApiRequestState = styled(StateText)<IApiState>`
+  color: ${({ error }) => error ? 'red' : 'white'};
+`;
+
 
 function App() {
 
@@ -38,13 +58,13 @@ function App() {
       <ChannelsContext.Provider value={{ channels, setChannels }}>
         <FilterContext.Provider value={{ filter, setFilter }}>
           <AppHeader />
-          <main className={styles.main}>
-            {isLoading ? <p className={styles.loading} >Загружаем данные...</p> : null}
-            {isError ? <p className={styles.error} >Произошла ошибка, попробуйте еще раз</p> : null}
+          <Main>
+            {isLoading ? <ApiRequestState>Загружаем данные...</ApiRequestState> : null}
+            {isError ? <ApiRequestState error>Произошла ошибка, попробуйте еще раз</ApiRequestState> : null}
             <FavoriteChannelsContext.Provider value={{ favoritesChannels, setFavoritesChannels }}>
               {channels && !isError && channels.length ? <ChannelBox /> : null}
             </FavoriteChannelsContext.Provider>
-          </main>
+          </Main>
         </FilterContext.Provider>
       </ChannelsContext.Provider>
     </>

@@ -1,7 +1,17 @@
 import { Channel } from '../channel/channel';
-import styles from './channel-box.module.css';
 import { ChannelsContext, FilterContext, FavoriteChannelsContext } from '../../services/appContext';
 import { useContext, useMemo } from 'react';
+import styled from 'styled-components';
+
+const ChannelsContainer = styled.div`
+  height: 100%;
+  width: 100%;
+  background-color: #1A1A1A;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+`;
+
 
 export const ChannelBox = () => {
 
@@ -29,8 +39,8 @@ export const ChannelBox = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <ChannelsContainer>
       {filteredChannels && filteredChannels.map((channel) => <Channel number={channel.number} key={channel.number} name_ru={channel.name_ru} image={channel.image} fav={isFav(channel)} />)}
-    </div>
+    </ChannelsContainer>
   )
 };
