@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FC, useContext, useState } from 'react';
+import { FC, useContext, useState, useRef, useEffect, useCallback } from 'react';
 import { FavoriteChannelsContext } from '../../services/appContext';
 
 type TStar = {
@@ -29,6 +29,8 @@ export type TChannel = {
   image: string;
   number: number;
   fav: boolean | undefined;
+  setFocus: any;
+  focus: any;
 };
 
 const StarContainer = styled.div`
@@ -63,22 +65,34 @@ const ChannelContainer = styled.div`
   border-radius: 24px;
   position: relative;
 
+  &:focus,
   &:hover {
     background-color: #1D8CFF;
+    outline: none;
   } 
   
+  &:focus > ${StarContainer} svg,
   &:hover > ${StarContainer} svg {
     display: block;
+    outline: none;
   }
 
+  &:focus > ${ChannelName},
   &:hover > ${ChannelName} {
     color: white;
+    outline: none;
+  }
+
+  &:active {
+    background-color: #333;
+    border-color: #333;
+    color: #eee;
   }
 
 `;
 
 
-export const Channel: FC<TChannel> = ({ name_ru, image, number, fav }) => {
+export const Channel: FC<TChannel> = ({ setFocus, focus, name_ru, image, number, fav }) => {
 
   const [favorite, setFavorite] = useState(fav);
 
@@ -96,8 +110,22 @@ export const Channel: FC<TChannel> = ({ name_ru, image, number, fav }) => {
     }
   }
 
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (focus) {
+      //@ts-ignore
+      ref.current.focus();
+    }
+  }, [focus]);
+
+  const handleSelect = useCallback(() => {
+    alert(`${name_ru}`);
+    setFocus(number);
+  }, [name_ru, number, setFocus]);
+
   return (
-    <ChannelContainer>
+    <ChannelContainer tabIndex={focus ? 0 : -1} ref={ref} onClick={handleSelect} onKeyPress={handleSelect} >
       <StarContainer>
         <Star fav={favorite} onClick={favHandler} />
       </StarContainer>

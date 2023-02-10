@@ -11,7 +11,7 @@ const Header = styled.header`
 
 export const AppHeader = () => {
   return (
-    <Header>
+    <Header tabIndex={1}>
       <img src={logo} alt="logo" />
       <Search placeholder='Поиск телеканалов'/>
     </Header>

@@ -57,8 +57,8 @@ function App() {
     <>
       <ChannelsContext.Provider value={{ channels, setChannels }}>
         <FilterContext.Provider value={{ filter, setFilter }}>
-          <AppHeader />
-          <Main>
+          <AppHeader/>
+          <Main tabIndex={2} >
             {isLoading ? <ApiRequestState>Загружаем данные...</ApiRequestState> : null}
             {isError ? <ApiRequestState error>Произошла ошибка, попробуйте еще раз</ApiRequestState> : null}
             <FavoriteChannelsContext.Provider value={{ favoritesChannels, setFavoritesChannels }}>
