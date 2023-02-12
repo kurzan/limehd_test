@@ -1,27 +1,32 @@
 import { useCallback, useState, useEffect } from "react";
 
-export const useFocus = (size: any) => {
+export const useFocus = (size?: any) => {
   const [currentFocus, setCurrentFocus] = useState(0);
   const [boxPerRow, setBoxPerRow] = useState(0);
+
+  const isTopRow = currentFocus <= boxPerRow - 1;
+  const isBottomRow = currentFocus >= size - boxPerRow;
+  const isLeftColumn = currentFocus % boxPerRow === 0;
+  const isRightColumn = currentFocus % boxPerRow === boxPerRow - 1 || currentFocus === size - 1;
 
   const handleKeyDown = useCallback(
     (e: any) => {
       if (e.key === 'ArrowRight') {
         e.preventDefault();
-        setCurrentFocus(currentFocus === size - 1 ? 0 : currentFocus + 1);
+        !isRightColumn && setCurrentFocus(currentFocus + 1);
       } else if (e.key === 'ArrowLeft') {
         e.preventDefault();
-        setCurrentFocus(currentFocus === 0 ? size - 1 : currentFocus - 1);
+        !isLeftColumn && setCurrentFocus(currentFocus - 1);
       } else if (e.key === 'ArrowDown') {
         e.preventDefault();
-        setCurrentFocus(currentFocus === 0 ? size - 1 : currentFocus + boxPerRow);
+        !isBottomRow && setCurrentFocus(currentFocus + boxPerRow);
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
-        setCurrentFocus(currentFocus === 0 ? size - 1 : currentFocus - boxPerRow);
+        !isTopRow && setCurrentFocus(currentFocus - boxPerRow);
       }
       
     },
-    [size, currentFocus, setCurrentFocus, boxPerRow]
+    [currentFocus, setCurrentFocus, boxPerRow, isLeftColumn, isRightColumn, isBottomRow, isTopRow]
   );
 
   useEffect(() => {
@@ -31,5 +36,5 @@ export const useFocus = (size: any) => {
     };
   }, [handleKeyDown]);
 
-  return [currentFocus, setCurrentFocus, setBoxPerRow];
+  return {currentFocus, setCurrentFocus, setBoxPerRow};
 };

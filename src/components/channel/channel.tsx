@@ -92,10 +92,9 @@ const ChannelContainer = styled.div`
 `;
 
 
-export const Channel: FC<TChannel> = ({ setFocus, focus, name_ru, image, number, fav }) => {
+export const Channel: FC<TChannel> = ({ focus, name_ru, image, number, fav }) => {
 
   const [favorite, setFavorite] = useState(fav);
-
   const { favoritesChannels, setFavoritesChannels } = useContext(FavoriteChannelsContext);
 
   const favHandler = () => {
@@ -121,8 +120,7 @@ export const Channel: FC<TChannel> = ({ setFocus, focus, name_ru, image, number,
 
   const handleSelect = useCallback(() => {
     alert(`${name_ru}`);
-    setFocus(number);
-  }, [name_ru, number, setFocus]);
+  }, [name_ru]);
 
   return (
     <ChannelContainer tabIndex={focus ? 0 : -1} ref={ref} onClick={handleSelect} onKeyPress={handleSelect} >

@@ -49,8 +49,9 @@ function App() {
   }, [])
 
   useEffect(() => {
-    const fromLocalStorage = JSON.parse(window.localStorage.getItem('favorites') as any);
-    setFavoritesChannels(fromLocalStorage ? fromLocalStorage : []);
+    // const fromLocalStorage = JSON.parse(window.localStorage.getItem('favorites') as any);
+    // setFavoritesChannels(fromLocalStorage ? fromLocalStorage : []);
+
   }, [])
 
   return (
@@ -58,7 +59,7 @@ function App() {
       <ChannelsContext.Provider value={{ channels, setChannels }}>
         <FilterContext.Provider value={{ filter, setFilter }}>
           <AppHeader/>
-          <Main tabIndex={2} >
+          <Main>
             {isLoading ? <ApiRequestState>Загружаем данные...</ApiRequestState> : null}
             {isError ? <ApiRequestState error>Произошла ошибка, попробуйте еще раз</ApiRequestState> : null}
             <FavoriteChannelsContext.Provider value={{ favoritesChannels, setFavoritesChannels }}>

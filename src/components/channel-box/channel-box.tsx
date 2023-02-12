@@ -30,7 +30,7 @@ export const ChannelBox = () => {
     [channels, filter]
   );
 
-  const [focus, setFocus, setBoxesPerRows] = useFocus(filteredChannels.length);
+  const {currentFocus, setCurrentFocus, setBoxPerRow} = useFocus(filteredChannels.length);
 
 
   const isFav = (channel: any) => {
@@ -45,8 +45,10 @@ export const ChannelBox = () => {
   const ref = useRef(null);
 
   useEffect(() => {
-    //@ts-ignore
+
+      //@ts-ignore
     const boxes = ref.current.children;
+    
     let boxPerRow = 0;
     if (boxes.length > 1) {
       var i = 0,
@@ -57,17 +59,17 @@ export const ChannelBox = () => {
     }
 
       //@ts-ignore
-    setBoxesPerRows(boxPerRow)
+      setBoxPerRow(boxPerRow)
+
+    console.log(boxPerRow)
 
 
-  }, [setBoxesPerRows])
-
-
+  }, [setBoxPerRow])
 
   return (
     <ChannelsContainer tabIndex={-1} ref={ref} >
       {filteredChannels && filteredChannels.map((channel, index) => 
-        <Channel setFocus={setFocus} focus={focus === index} number={channel.number} key={channel.number} name_ru={channel.name_ru} image={channel.image} fav={isFav(channel)} />)}
+        <Channel setFocus={setCurrentFocus} focus={currentFocus === index} number={channel.number} key={channel.number} name_ru={channel.name_ru} image={channel.image} fav={isFav(channel)} />)}
     </ChannelsContainer>
   )
 };
