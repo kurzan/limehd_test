@@ -1,7 +1,8 @@
 import { Channel } from '../channel/channel';
 import { ChannelsContext, FilterContext, FavoriteChannelsContext } from '../../services/appContext';
-import { useContext, useMemo } from 'react';
+import { useContext, useEffect, useMemo, useRef } from 'react';
 import styled from 'styled-components';
+import { useFocus } from '../../hooks/useFocus';
 
 const ChannelsContainer = styled.div`
   height: 100%;
@@ -29,6 +30,9 @@ export const ChannelBox = () => {
     [channels, filter]
   );
 
+  const {currentFocus, setCurrentFocus, setBoxPerRow} = useFocus(filteredChannels.length);
+
+
   const isFav = (channel: any) => {
 
     for (let i = 0; i < favoritesChannels.length; i++) {
@@ -38,9 +42,34 @@ export const ChannelBox = () => {
     }
   }
 
+  const ref = useRef(null);
+
+  useEffect(() => {
+
+      //@ts-ignore
+    const boxes = ref.current.children;
+    
+    let boxPerRow = 0;
+    if (boxes.length > 1) {
+      var i = 0,
+        total = boxes.length,
+        firstOffset = boxes[0].offsetTop;
+      while (++i < total && boxes[i].offsetTop === firstOffset);
+      boxPerRow = i;
+    }
+
+      //@ts-ignore
+      setBoxPerRow(boxPerRow)
+
+    console.log(boxPerRow)
+
+
+  }, [setBoxPerRow])
+
   return (
-    <ChannelsContainer>
-      {filteredChannels && filteredChannels.map((channel) => <Channel number={channel.number} key={channel.number} name_ru={channel.name_ru} image={channel.image} fav={isFav(channel)} />)}
+    <ChannelsContainer tabIndex={-1} ref={ref} >
+      {filteredChannels && filteredChannels.map((channel, index) => 
+        <Channel setFocus={setCurrentFocus} focus={currentFocus === index} number={channel.number} key={channel.number} name_ru={channel.name_ru} image={channel.image} fav={isFav(channel)} />)}
     </ChannelsContainer>
   )
 };

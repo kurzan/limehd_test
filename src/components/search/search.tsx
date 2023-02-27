@@ -1,4 +1,4 @@
-import { FC, useContext } from 'react';
+import { FC, useContext, useRef } from 'react';
 import search_img from '../../images/search.svg';
 import { FilterContext } from '../../services/appContext';
 import styled from 'styled-components';
@@ -51,6 +51,7 @@ const SearchIcon = styled.img`
 export const Search: FC<TSearch> = ({ placeholder }) => {
 
   const { setFilter } = useContext(FilterContext);
+  const ref = useRef(null);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(e.target.value);
@@ -58,7 +59,7 @@ export const Search: FC<TSearch> = ({ placeholder }) => {
 
   return (
     <SearchContainer>
-      <SearchInput placeholder={placeholder} onChange={onChange} />
+      <SearchInput ref={ref} placeholder={placeholder} onChange={onChange} />
       <SearchIcon src={search_img} alt="search"/>
     </SearchContainer>
     )
