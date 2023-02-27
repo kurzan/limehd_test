@@ -58,7 +58,7 @@ export const Search: FC<TSearch> = ({ placeholder }) => {
   };
 
   return (
-    <SearchContainer>
+    <SearchContainer tabIndex={-1}>
       <SearchInput ref={ref} placeholder={placeholder} onChange={onChange} />
       <SearchIcon src={search_img} alt="search"/>
     </SearchContainer>

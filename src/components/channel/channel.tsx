@@ -118,12 +118,14 @@ export const Channel: FC<TChannel> = ({ focus, name_ru, image, number, fav }) =>
     }
   }, [focus]);
 
-  const handleSelect = useCallback(() => {
-    alert(`${name_ru}`);
+  const handleSelect = useCallback((e: any) => {
+    if (e.key === 'Enter') {
+      alert(`${name_ru}`);
+    }
   }, [name_ru]);
 
   return (
-    <ChannelContainer tabIndex={focus ? 0 : -1} ref={ref} onClick={handleSelect} onKeyPress={handleSelect} >
+    <ChannelContainer tabIndex={focus ? 0 : -1} ref={ref} onKeyPress={handleSelect} >
       <StarContainer>
         <Star fav={favorite} onClick={favHandler} />
       </StarContainer>

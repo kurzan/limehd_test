@@ -61,8 +61,6 @@ export const ChannelBox = () => {
       //@ts-ignore
       setBoxPerRow(boxPerRow)
 
-    console.log(boxPerRow)
-
 
   }, [setBoxPerRow])
 
