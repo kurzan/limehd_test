@@ -49,8 +49,8 @@ function App() {
   }, [])
 
   useEffect(() => {
-    // const fromLocalStorage = JSON.parse(window.localStorage.getItem('favorites') as any);
-    // setFavoritesChannels(fromLocalStorage ? fromLocalStorage : []);
+    const fromLocalStorage = JSON.parse(window.localStorage.getItem('favorites') as any);
+    setFavoritesChannels(fromLocalStorage ? fromLocalStorage : []);
 
   }, [])
 
